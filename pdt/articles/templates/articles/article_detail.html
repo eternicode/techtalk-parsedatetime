@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ object.title }}</title>
+</head>
+<body>
+
+<h1>{{ object.title }}</h1>
+<p>Published {{ object.created|date:"N j, Y" }} / Modified {{ object.modified|date:"N j, Y" }}</p>
+
+<p>{{ object.description }}</p>
+
+<p><a href="{% url edit_article object_id=object.id %}">edit</a> | <a href="{% url home %}">back to articles</a></p>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>New article</title>
+</head>
+<body>
+
+<h1>{{ form.instance.pk|yesno:"Edit,New" }} article</h1>
+
+<form method="post">
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+<p>
+    {% if form.instance.pk %}
+    <a href="{% url article object_id=form.instance.pk %}">cancel</a> |
+    {% endif %}
+    <a href="{% url home %}">back to articles</a>
+</p>
+
+</body>
+</html>

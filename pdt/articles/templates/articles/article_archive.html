@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Articles</title>
+</head>
+<body>
+
+<h1>{{ latest.count }} Article{{ latest.count|pluralize }}</h1>
+
+<ul>
+{% for article in latest %}
+<li>
+<h2>{{ article.title }} - {{ article.created|date:"N j, Y" }}</h2>
+<p>{{ article.description }}</p>
+<p><a href="{{ article.get_absolute_url }}">read more...</a></p>
+</li>
+{% endfor %}
+</ul>
+
+<p><a href="{% url create_article %}">new article</a></p>
+
+</body>
+</html>
