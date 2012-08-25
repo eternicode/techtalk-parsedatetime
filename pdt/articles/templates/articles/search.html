@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Search</title>
+</head>
+<body>
+
+{% if articles != None %}
+<h1>{{ articles.count }} Result{{ articles.count|pluralize }}</h1>
+{% else %}
+<h1>Search Articles</h1>
+{% endif %}
+
+<form>
+{{ form.q }}
+<button>Search</button>
+</form>
+
+<ul>
+{% for article in articles %}
+<li>
+<h2>{{ article.title }} - {{ article.created|date:"N j, Y" }}</h2>
+<p>{{ article.description }}</p>
+<p><a href="{{ article.get_absolute_url }}">read more...</a></p>
+</li>
+{% endfor %}
+</ul>
+
+<p><a href="{% url home %}">back to all articles</a></p>
+
+</body>
+</html>

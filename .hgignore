@@ -2,3 +2,4 @@ syntax:glob
 
 *pyc
 pdt/sqlite3.db
+pdt/whoosh_index

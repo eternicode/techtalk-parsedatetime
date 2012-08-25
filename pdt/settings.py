@@ -17,6 +17,10 @@ DATABASES = {
     }
 }
 
+HAYSTACK_SITECONF = 'pdt.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'whoosh'
+HAYSTACK_WHOOSH_PATH = join(ROOT_DIR, 'whoosh_index')
+
 TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en-us'
 
@@ -72,6 +76,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
 
     'django_extensions',
+    'haystack',
 
     'pdt.articles',
 )

@@ -5,6 +5,7 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 from .articles.models import Article
+from .articles.views import Search
 
 urlpatterns = patterns('',
     url(r'^$', 'django.views.generic.date_based.archive_index', dict(
@@ -20,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^(?P<object_id>\d+)/edit$', 'django.views.generic.create_update.update_object', dict(
             model = Article,
         ), name='edit_article'),
+    url(r'^search$', Search.as_view(), name='search'),
 
 
     # Uncomment the next line to enable the admin:
