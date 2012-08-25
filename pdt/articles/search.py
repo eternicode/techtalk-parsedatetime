@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from parsedatetime import parsedatetime as pdt, parsedatetime_consts as pdc
 
 time_parser = pdt.Calendar(pdc.Constants())
+within_re = re.compile(r'within\s+(\d+(?:\.\d+)?)\s*(years?|yrs?|y|months?|mon?s?|da?ys?|d|hours?|hrs?|h|minutes?|mins?|m|seconds?|secs?|s)')
 def handle_time(s, matches):
     for negate, field, text, quoted in matches:
         if quoted:
@@ -39,6 +40,22 @@ def handle_time(s, matches):
                     before = (datetime.min, boundary),
                     after = (boundary, datetime.max)
                 )[limit]
+
+            elif within_re.search(text):
+                magnitude, unit = within_re.search(text).groups()
+                magnitude = float(magnitude)
+                if unit[:2] == 'mo':
+                    unit = 'o'
+                unit = unit[0]
+                delta = dict(
+                    y = timedelta(days=365.25*magnitude),
+                    o = timedelta(days=30.5*magnitude),
+                    d = timedelta(days=magnitude),
+                    h = timedelta(seconds=3600*magnitude),
+                    m = timedelta(seconds=60*magnitude),
+                    s = timedelta(seconds=magnitude),
+                )[unit]
+                range = (bound-delta, bound+delta)
 
             else:
                 # chances are nothing actually happened at that specific time,
