@@ -16,33 +16,48 @@ def handle_time(s, matches):
             while datetime(*data[:6]) > now:
                 data[0] -= 1
 
+        limit = re.search(r'before|after', text.lower())
+        limit = limit.group(0) if limit else 'date'
+
         if not parsed: # not parsed
             continue
         elif parsed == 1: # parsed as date
             boundary = datetime(*data[:3])
             sod = boundary.replace(hour=0, minute=0, second=0, microsecond=0)
             eod = boundary.replace(hour=23, minute=59, second=59, microsecond=999999)
-            range = (sod, eod)
+            range = dict(
+                date = (sod, eod),
+                after = (eod, datetime.max),
+                before = (datetime.min, sod),
+            )[limit]
         elif parsed in [2, 3]: # parsed as time, datetime
             boundary = datetime(*data[:6])
 
-            # chances are nothing actually happened at that specific time,
-            # so we add different ranges of fuzz based on how specific their
-            # query was.
-            if boundary.second:
-                # 1-minute fuzz for seconds resolution
-                delta = timedelta(seconds=30)
-            elif boundary.minute:
-                # 10-minute fuzz for minute resolution
-                delta = timedelta(seconds=300)
-            elif boundary.hour:
-                # 2-hour fuzz for hour resolution
-                delta = timedelta(seconds=3600)
+            if limit in ['before', 'after']:
+                # Allow before/after queries to specify specific times
+                range = dict(
+                    before = (datetime.min, boundary),
+                    after = (boundary, datetime.max)
+                )[limit]
+
             else:
-                # 5-hour fuzz for day resolution (which should be parsed as
-                # a date, above, anyway...)
-                delta = timedelta(seconds=9000)
-            range = (boundary-delta, boundary+delta)
+                # chances are nothing actually happened at that specific time,
+                # so we add different ranges of fuzz based on how specific their
+                # query was.
+                if boundary.second:
+                    # 1-minute fuzz for seconds resolution
+                    delta = timedelta(seconds=30)
+                elif boundary.minute:
+                    # 10-minute fuzz for minute resolution
+                    delta = timedelta(seconds=300)
+                elif boundary.hour:
+                    # 2-hour fuzz for hour resolution
+                    delta = timedelta(seconds=3600)
+                else:
+                    # 5-hour fuzz for day resolution (which should be parsed as
+                    # a date, above, anyway...)
+                    delta = timedelta(seconds=9000)
+                range = (boundary-delta, boundary+delta)
 
         filter = (
             dict(created__gte=range[0], created__lte=range[1])
