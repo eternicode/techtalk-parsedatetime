@@ -1,6 +1,10 @@
+import re
 from datetime import datetime, timedelta
 
 from parsedatetime import parsedatetime as pdt, parsedatetime_consts as pdc
+
+from .utils import words2ints
+
 
 time_parser = pdt.Calendar(pdc.Constants())
 within_re = re.compile(r'within\s+(\d+(?:\.\d+)?)\s*(years?|yrs?|y|months?|mon?s?|da?ys?|d|hours?|hrs?|h|minutes?|mins?|m|seconds?|secs?|s)')
@@ -8,6 +12,7 @@ def handle_time(s, matches):
     for negate, field, text, quoted in matches:
         if quoted:
             text = text[1:-1]
+        text = words2ints(text)
         data, parsed = time_parser.parse(text)
 
         data = list(data)
