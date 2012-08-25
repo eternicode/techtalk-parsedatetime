@@ -1,0 +1,4 @@
+syntaxes = {
+    # pattern: handler
+}
+

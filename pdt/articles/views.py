@@ -1,7 +1,12 @@
+import string, re
+
 from django import forms
 from django.views.generic.edit import FormView
 
 from haystack.query import SearchQuerySet
+
+from .search import syntaxes
+
 
 class SearchForm(forms.Form):
     q = forms.CharField()
@@ -22,4 +27,17 @@ class Search(FormView):
         return kwargs
 
 def search(query):
-    return SearchQuerySet().auto_query(query)
+    s = SearchQuerySet()
+
+    for regex, handler in syntaxes.items():
+        regex = re.compile(regex, re.I)
+        matches = regex.findall(query)
+        query = regex.sub('', query)
+        if matches:
+            s = handler(s, matches)
+
+    # Strip leading and trailing punctuation -- fix for xapian, but shouldn't hurt for other backends
+    punct = ''.join(set(string.punctuation) ^ set("'\"-"))
+    querystring = ' '.join(word.strip(punct) for word in query.split())
+
+    return s.auto_query(query)
