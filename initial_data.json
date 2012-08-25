@@ -1,0 +1,35 @@
+[
+    {
+        "pk": 1, 
+        "model": "articles.article", 
+        "fields": {
+            "description": "If you don't know this one weird trick, you're wasting your time!!!", 
+            "slug": "search-by-time", 
+            "title": "Search by time!", 
+            "modified": "2012-07-14T13:00:47.963", 
+            "created": "2012-06-25T03:06:19.024"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "articles.article", 
+        "fields": {
+            "description": "Local man kills younger self to prevent progress in the development of time travel, pleads insanity.", 
+            "slug": "time-traveler-murders-self", 
+            "title": "Time traveler murders self", 
+            "modified": "2012-07-30T03:12:28.329", 
+            "created": "2012-07-24T03:09:58.289"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "articles.article", 
+        "fields": {
+            "description": "Maya Magazine unveils the real \"End of Time\"", 
+            "slug": "the-end-of-time", 
+            "title": "The end of time", 
+            "modified": "2012-08-24T03:36:03.623", 
+            "created": "2012-08-24T03:36:03.621"
+        }
+    }
+]
