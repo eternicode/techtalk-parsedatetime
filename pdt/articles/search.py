@@ -34,7 +34,7 @@ def handle_time(s, matches):
             range = dict(
                 date = (sod, eod),
                 after = (eod, datetime.max),
-                before = (datetime.min, sod),
+                before = (datetime(1900, 1, 1), sod),
             )[limit]
         elif parsed in [2, 3]: # parsed as time, datetime
             boundary = datetime(*data[:6])
@@ -42,7 +42,7 @@ def handle_time(s, matches):
             if limit in ['before', 'after']:
                 # Allow before/after queries to specify specific times
                 range = dict(
-                    before = (datetime.min, boundary),
+                    before = (datetime(1900, 1, 1), boundary),
                     after = (boundary, datetime.max)
                 )[limit]
 
